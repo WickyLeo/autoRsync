@@ -1,0 +1,6 @@
+# ignore folder
+# don't need to sync to server
+
+.git/
+.svn/
+.idea/

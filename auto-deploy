@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#rsync
+rsync_server=10.33.106.70
+rsync_user=work
+ignore=/ignore.txt
+
+colors=$(tput colors)
+if (($colors >= 8)); then
+    red='\033[0;31m'
+    green='\033[0;32m'
+    yellow='\033[0;33m'
+    nocolor='\033[00m'
+else
+  red=
+  green=
+  nocolor=
+fi
+
+if [[ "$1" = "" || "$2" = "" ]]; then
+  echo -e "${red}Error: Project takes 3 compulsory arguments.${nocolor}"
+  echo -n "Usage: auto-deploy.sh /local/path user@server:/path"
+  exit
+else
+  LOCAL_PATH="$1"
+  TARGET="$2"
+fi
+
+if [ ! -d $LOCAL_PATH ]; then
+	echo $LOCAL_PATH "not exists, please check!"
+	exit
+fi
+
+echo "------------Start Sync File-------------"
+
+echo "Current directory:"$LOCAL_PATH
+echo "Destination:"$TARGET
+
+fswatch $LOCAL_PATH | while read file
+
+do
+	rsync -rltzuq --delete -r --exclude-from=$ignore --stats --progress $LOCAL_PATH $rsync_user@$rsync_server:$TARGET
+	echo "${file} was rsynced"
+
+done
+
