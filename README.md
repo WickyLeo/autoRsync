@@ -14,7 +14,7 @@ ignore.txt record the folder list dont't need sync.
 add the script to /usr/local/bin:
 
 ```
-   ls -s auto-depoy /usr/local/bin/
+   ln -s auto-depoy /usr/local/bin/
 ```
 run like this:
 
